@@ -1,0 +1,30 @@
+# Aqui el nombre del pipeline
+stages:
+  - inicio
+  - logica
+  - final
+
+# Aqui pondremos el job de inicio
+inicio:
+  stage: inicio
+  script:
+    - echo "Comentario cualquiera para el job de inicio"
+
+# Aqui pondremos el job de lógica
+logica:
+  stage: logica
+  script:
+    - date > fecha_ejecucion.txt  # Creamos archivo con fecha y hora
+    - cat fecha_ejecucion.txt     # Mostrar contenido del archivo
+
+# Job final que se ejecuta al finalizar el job de lógica
+final:
+  stage: final
+  script:
+    - echo "Job final iniciado"
+
+# Regla para que el job final se ejecute al completar el job de lógica
+rules:
+  - if: '$CI_COMMIT_BRANCH == "development"'
+    when: on_success
+    start_in: logica
