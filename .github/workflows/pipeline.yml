@@ -1,8 +1,9 @@
 # Nombre del pipeline
 name: Tommy
 on:
-  branches:
-    - main:
+  push:
+    branches:
+      - main
 
 jobs:
   # Job de inicio
