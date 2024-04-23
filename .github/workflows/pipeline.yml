@@ -1,31 +1,34 @@
-# Nombre del pipeline
-name: Tommy
+name: Scan App
 on:
-  push:
+  pull_request:
     branches:
       - main
+      - develop
+    types: [opened, reopened, synchronize, closed] 
+  push:
+      branches:
+        - main
+        - feature/*
+  workflow_call:
 
 jobs:
-  # Job de inicio
-  inicio:
-    stage: inicio
-    script:
-      - echo "Comentario cualquiera para el job de inicio"
-
-  # Job de lógica
-  logica:
-    needs: inicio
-    stage: logica
-    script:
-      - date > fecha_ejecucion.txt  # Crear archivo con fecha y hora
-      - cat fecha_ejecucion.txt     # Mostrar contenido del archivo
-    artifacts:
-      paths:
-        - fecha_ejecucion.txt  # Compartir el archivo entre jobs
-
-  # Job final que se ejecuta al finalizar logica
-  final:
-    stage: final
-    script:
-      - echo "Job final iniciado"
-    needs: logica
+  Inicio:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Inicio
+        run: |
+          echo "este es el inicio"
+  Logica:
+    needs: "Inicio"
+    runs-on: ubuntu-latest
+    steps:
+      - name: Logica
+        run: |
+         echo "este es el job de logica"
+  Final:
+    needs: "Logica"
+    runs-on: ubuntu-latest
+    steps:
+      - name: Final
+        run: |
+            echo "este es el Final"
